@@ -1,0 +1,715 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #f3ead7;
+    font-family: Arial, sans-serif;
+}
+
+.game-container {
+    width: 800px;
+    margin: 40px auto;
+    text-align: center;
+}
+
+h1 {
+    margin: 0 0 25px;
+    font-size: 42px;
+}
+
+
+/* =========================
+   말 개수 설정
+========================= */
+
+.piece-setting {
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.piece-setting div {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.piece-setting label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #4a2a16;
+}
+
+.piece-setting select {
+    width: 100px;
+    height: 40px;
+    padding: 5px 10px;
+    border: 2px solid #6b3f1f;
+    border-radius: 7px;
+    background: #fff7e8;
+    color: #4a2a16;
+    font-size: 16px;
+    text-align: center;
+}
+
+#start-button {
+    width: 110px;
+    height: 40px;
+    border: 2px solid #6b3f1f;
+    border-radius: 7px;
+    background: #6b3f1f;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#start-button:hover {
+    background: #4a2a16;
+}
+
+
+/* =========================
+   게임판
+========================= */
+
+.board {
+    position: relative;
+    width: 650px;
+    height: 650px;
+    margin: 0 auto;
+    background: #d8a15d;
+    border: 12px solid #6b3f1f;
+    border-radius: 10px;
+}
+
+
+/* 기존 가로 세로 선 */
+
+.line {
+    position: absolute;
+    background: #4a2a16;
+    z-index: 1;
+}
+
+.top-line,
+.bottom-line {
+    left: 5%;
+    width: 90%;
+    height: 6px;
+}
+
+.top-line {
+    top: 5%;
+}
+
+.bottom-line {
+    bottom: 5%;
+}
+
+.left-line,
+.right-line {
+    top: 5%;
+    width: 6px;
+    height: 90%;
+}
+
+.left-line {
+    left: 5%;
+}
+
+.right-line {
+    right: 5%;
+}
+
+
+/* 기존 대각선 */
+
+.diagonal {
+    position: absolute;
+    width: 127.28%;
+    height: 6px;
+    left: -13.64%;
+    top: 50%;
+    background: #4a2a16;
+    transform-origin: center;
+    z-index: 1;
+}
+
+.diagonal-1 {
+    transform: rotate(45deg);
+}
+
+.diagonal-2 {
+    transform: rotate(-45deg);
+}
+
+
+/* =========================
+   기본 칸
+========================= */
+
+.point {
+    position: absolute;
+    width: 42px;
+    height: 42px;
+    transform: translate(-50%, -50%);
+    border: 5px solid #4a2a16;
+    border-radius: 50%;
+    background: #f8e7bf;
+    z-index: 3;
+}
+
+.big {
+    width: 58px;
+    height: 58px;
+    border-width: 6px;
+}
+
+
+/* 바깥쪽 */
+
+.p1 {
+    left: 5%;
+    top: 5%;
+}
+
+.p2 {
+    left: 23%;
+    top: 5%;
+}
+
+.p3 {
+    left: 41%;
+    top: 5%;
+}
+
+.p4 {
+    left: 59%;
+    top: 5%;
+}
+
+.p5 {
+    left: 77%;
+    top: 5%;
+}
+
+.p6 {
+    left: 95%;
+    top: 5%;
+}
+
+.p7 {
+    left: 95%;
+    top: 23%;
+}
+
+.p8 {
+    left: 95%;
+    top: 41%;
+}
+
+.p9 {
+    left: 95%;
+    top: 59%;
+}
+
+.p10 {
+    left: 95%;
+    top: 77%;
+}
+
+.p11 {
+    left: 95%;
+    top: 95%;
+}
+
+.p12 {
+    left: 77%;
+    top: 95%;
+}
+
+.p13 {
+    left: 59%;
+    top: 95%;
+}
+
+.p14 {
+    left: 41%;
+    top: 95%;
+}
+
+.p15 {
+    left: 23%;
+    top: 95%;
+}
+
+.p16 {
+    left: 5%;
+    top: 95%;
+}
+
+.p17 {
+    left: 5%;
+    top: 77%;
+}
+
+.p18 {
+    left: 5%;
+    top: 59%;
+}
+
+.p19 {
+    left: 5%;
+    top: 41%;
+}
+
+.p20 {
+    left: 5%;
+    top: 23%;
+}
+
+
+/* =========================
+   대각선 칸
+========================= */
+
+.diagonal-point {
+    background: #f8e7bf;
+}
+
+
+/* 왼쪽 위 → 중앙 → 오른쪽 아래 */
+
+.d1 {
+    left: 20%;
+    top: 20%;
+}
+
+.d2 {
+    left: 35%;
+    top: 35%;
+}
+
+.d3 {
+    left: 65%;
+    top: 65%;
+}
+
+.d4 {
+    left: 80%;
+    top: 80%;
+}
+
+
+/* 오른쪽 위 → 중앙 → 왼쪽 아래 */
+
+.d5 {
+    left: 80%;
+    top: 20%;
+}
+
+.d6 {
+    left: 65%;
+    top: 35%;
+}
+
+.d7 {
+    left: 35%;
+    top: 65%;
+}
+
+.d8 {
+    left: 20%;
+    top: 80%;
+}
+
+
+/* 중앙 */
+
+.center {
+    left: 50%;
+    top: 50%;
+    width: 68px;
+    height: 68px;
+    border-width: 7px;
+    background: #e8c98e;
+}
+
+
+/* =========================
+   결과 버튼
+========================= */
+
+.result-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 25px;
+}
+
+.result-buttons button {
+    width: 75px;
+    height: 45px;
+    border: 2px solid #6b3f1f;
+    border-radius: 8px;
+    background: #fff7e8;
+    color: #4a2a16;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.result-buttons button:hover {
+    background: #ead1a6;
+}
+
+
+/* =========================
+   이동 / 차례
+========================= */
+
+.game-controls {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.undo-button {
+    padding: 10px 25px;
+    border: 2px solid #777;
+    border-radius: 8px;
+    background: #eeeeee;
+    color: #333;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.undo-button:hover {
+    background: #dddddd;
+}
+
+#next-turn-button {
+    padding: 10px 25px;
+    border: 2px solid #6b3f1f;
+    border-radius: 8px;
+    background: #6b3f1f;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#next-turn-button:hover {
+    background: #4a2a16;
+}
+
+#turn-display {
+    margin-top: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #4a2a16;
+}
+
+#selected-result {
+    margin-top: 8px;
+    font-size: 17px;
+    font-weight: bold;
+    color: #6b3f1f;
+}
+
+#result {
+    margin-top: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #4a2a16;
+}
+
+
+/* =========================
+   말
+========================= */
+
+.game-piece {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 4px solid #3a2415;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 17px;
+    font-weight: bold;
+    z-index: 10;
+    cursor: pointer;
+}
+
+.player1 {
+    background: #d94b4b;
+    color: white;
+}
+
+.player2 {
+    background: #4169a1;
+    color: white;
+}
+
+
+/* 팀 이름 */
+
+.team-title {
+    position: absolute;
+    font-size: 22px;
+    font-weight: bold;
+    color: #3a2415;
+    transform: translateX(-50%);
+    z-index: 20;
+    white-space: nowrap;
+}
+
+
+/* =========================
+   미션 창
+========================= */
+
+#mission-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+#mission-box {
+    width: 400px;
+    padding: 30px;
+    background: #fff7e8;
+    border: 4px solid #6b3f1f;
+    border-radius: 15px;
+    text-align: center;
+}
+
+#mission-box h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #4a2a16;
+}
+
+#mission-text {
+    margin-bottom: 25px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.mission-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.mission-buttons button {
+    width: 110px;
+    height: 45px;
+    border: 2px solid #6b3f1f;
+    border-radius: 8px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#mission-success {
+    background: #6b3f1f;
+    color: white;
+}
+
+#mission-fail {
+    background: #eeeeee;
+    color: #333;
+}
+
+
+/* =========================
+   경로 선택 창
+========================= */
+
+#route-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1100;
+    justify-content: center;
+    align-items: center;
+}
+
+#route-box {
+    width: 400px;
+    padding: 30px;
+    background: #fff7e8;
+    border: 4px solid #6b3f1f;
+    border-radius: 15px;
+    text-align: center;
+}
+
+#route-box h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #4a2a16;
+}
+
+#route-box p {
+    margin-bottom: 25px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.route-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.route-buttons button {
+    width: 140px;
+    height: 50px;
+    border: 2px solid #6b3f1f;
+    border-radius: 8px;
+    background: #6b3f1f;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.route-buttons button:hover {
+    background: #4a2a16;
+}
+
+
+/* =========================
+   승리
+========================= */
+
+.win-message {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+/* =========================
+   게임 재시작 버튼
+========================= */
+
+.restart-button {
+    margin-top: 40px;
+    width: 140px;
+    height: 45px;
+
+    border: 2px solid #6b3f1f;
+    border-radius: 8px;
+
+    background: #fff7e8;
+    color: #4a2a16;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.restart-button:hover {
+    background: #ead1a6;
+}
+
+
+/* =========================
+   승리 팝업
+========================= */
+
+#win-overlay {
+    display: none;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.5);
+
+    z-index: 2000;
+
+    justify-content: center;
+    align-items: center;
+}
+
+
+#win-box {
+    width: 400px;
+    padding: 35px;
+
+    background: #fff7e8;
+
+    border: 4px solid #6b3f1f;
+    border-radius: 15px;
+
+    text-align: center;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+
+#win-title {
+    margin: 0 0 15px;
+
+    font-size: 32px;
+    color: #4a2a16;
+}
+
+
+#win-message {
+    margin: 0 0 25px;
+
+    font-size: 18px;
+    font-weight: bold;
+
+    color: #4a2a16;
+}
+
+
+#win-restart-button {
+    width: 150px;
+    height: 50px;
+
+    border: 2px solid #6b3f1f;
+    border-radius: 8px;
+
+    background: #6b3f1f;
+    color: white;
+
+    font-size: 17px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+#win-restart-button:hover {
+    background: #4a2a16;
+}
