@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>윷놀이</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="game-container">
+
+    <h1>윷놀이</h1>
+
+    <!-- 말 개수 선택 -->
+    <div class="piece-setting">
+
+        <div>
+            <label for="player1-pieces">1팀 말 개수</label>
+            <select id="player1-pieces">
+                <option value="2">2개</option>
+                <option value="3">3개</option>
+                <option value="4" selected>4개</option>
+                <option value="5">5개</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="player2-pieces">2팀 말 개수</label>
+            <select id="player2-pieces">
+                <option value="2">2개</option>
+                <option value="3">3개</option>
+                <option value="4" selected>4개</option>
+                <option value="5">5개</option>
+            </select>
+        </div>
+
+        <button id="start-button">게임 시작</button>
+
+    </div>
+
+
+    <!-- 게임판 -->
+    <div class="board">
+
+        <!-- 기존 바깥쪽 선 -->
+        <div class="line top-line"></div>
+        <div class="line bottom-line"></div>
+        <div class="line left-line"></div>
+        <div class="line right-line"></div>
+
+        <!-- 기존 대각선 -->
+        <div class="diagonal diagonal-1"></div>
+        <div class="diagonal diagonal-2"></div>
+
+
+        <!-- 위쪽 -->
+        <div class="point big p1"></div>
+        <div class="point p2"></div>
+        <div class="point p3"></div>
+        <div class="point p4"></div>
+        <div class="point p5"></div>
+        <div class="point big p6"></div>
+
+
+        <!-- 오른쪽 -->
+        <div class="point p7"></div>
+        <div class="point p8"></div>
+        <div class="point p9"></div>
+        <div class="point p10"></div>
+        <div class="point big p11"></div>
+
+
+        <!-- 아래쪽 -->
+        <div class="point p12"></div>
+        <div class="point p13"></div>
+        <div class="point p14"></div>
+        <div class="point p15"></div>
+        <div class="point big p16"></div>
+
+
+        <!-- 왼쪽 -->
+        <div class="point p17"></div>
+        <div class="point p18"></div>
+        <div class="point p19"></div>
+        <div class="point p20"></div>
+
+
+        <!-- 대각선 1 -->
+        <div class="point diagonal-point d1"></div>
+        <div class="point diagonal-point d2"></div>
+        <div class="point diagonal-point d3"></div>
+        <div class="point diagonal-point d4"></div>
+
+
+        <!-- 대각선 2 -->
+        <div class="point diagonal-point d5"></div>
+        <div class="point diagonal-point d6"></div>
+        <div class="point diagonal-point d7"></div>
+        <div class="point diagonal-point d8"></div>
+
+
+        <!-- 중앙 -->
+        <div class="point center"></div>
+
+    </div>
+
+
+    <!-- 윷 결과 -->
+    <div class="result-buttons">
+
+        <button data-yut="빽도">빽도</button>
+        <button data-yut="도">도</button>
+        <button data-yut="개">개</button>
+        <button data-yut="걸">걸</button>
+        <button data-yut="윷">윷</button>
+        <button data-yut="모">모</button>
+
+    </div>
+
+
+    <!-- 이동 및 차례 -->
+    <div class="game-controls">
+
+        
+
+        <button id="next-turn-button">
+            차례 넘기기
+        </button>
+
+    </div>
+    <button id="restart-button" class="restart-button">
+    게임 재시작
+    </button>
+
+
+    <!-- 현재 차례 -->
+    <div id="turn-display">
+        현재 차례: 1팀
+    </div>
+
+
+    <!-- 선택한 윷 결과 -->
+    <div id="selected-result">
+        선택한 결과: 없음
+    </div>
+
+
+    <!-- 게임 메시지 -->
+    <div id="result">
+        게임을 시작하고 실제 윷을 던진 후 결과를 선택해주세요.
+    </div>
+
+</div>
+
+
+<!-- 미션 창 -->
+<div id="mission-overlay">
+
+    <div id="mission-box">
+
+        <h2>미션</h2>
+
+        <p id="mission-text">
+            제자리에서 박수 5번 치기
+        </p>
+
+        <div class="mission-buttons">
+
+            <button id="mission-success">
+                성공
+            </button>
+
+            <button id="mission-fail">
+                실패
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- 경로 선택 창 -->
+<div id="route-overlay">
+
+    <div id="route-box">
+
+        <h2>이동 경로 선택</h2>
+
+        <p>
+            다음 이동 경로를 선택해주세요.
+        </p>
+
+        <div class="route-buttons">
+
+            <button id="outer-route-button">
+                바깥쪽 길
+            </button>
+
+            <button id="diagonal-route-button">
+                대각선 길
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="game.js"></script>
+
+<div id="win-overlay">
+    <div id="win-box">
+        <h2 id="win-title">1팀 승리!</h2>
+
+        <p id="win-message">
+            모든 말을 완주했습니다.
+        </p>
+
+        <button id="win-restart-button">
+            게임 재시작
+        </button>
+    </div>
+</div>
+
+</body>
+</html>

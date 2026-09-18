@@ -138,7 +138,12 @@ const diagonalRoute2 = [
     "center",
     "d7",
     "d8",
-    "p16"
+    "p16",
+    "p15",
+    "p14",
+    "p13",
+    "p12",
+    "p11"
 ];
 
 
@@ -148,42 +153,64 @@ const diagonalRoute2 = [
 
 const missions = {
 
-    p10: "제자리에서 박수 5번 치기",
-    p9: "제자리에서 박수 5번 치기",
-    p8: "제자리에서 박수 5번 치기",
-    p7: "제자리에서 박수 5번 치기",
-    p6: "제자리에서 박수 5번 치기",
-    p5: "제자리에서 박수 5번 치기",
-    p4: "제자리에서 박수 5번 치기",
-    p3: "제자리에서 박수 5번 치기",
-    p2: "제자리에서 박수 5번 치기",
-    p1: "제자리에서 박수 5번 치기",
+    p10: "교회 여자 집사님 이름 3명 5초안에 말하기",
+    p9: "옆에 있는 친구 3초 안에 안아주기",
+    p8: "말씀찾기/찬송가 찾기",
+    p7: "말씀찾기/찬송가 찾기",
+    p6: "깜짝 퀴즈",
+    p5: "말씀찾기/찬송가 찾기",
+    p4: "선생님과 가위바위보 해서 이기기",
+    p3: "말씀찾기/찬송가 찾기",
+    p2: "말씀찾기/찬송가 찾기",
+    p1: "깜짝 퀴즈",
 
-    p20: "제자리에서 박수 5번 치기",
-    p19: "제자리에서 박수 5번 치기",
-    p18: "제자리에서 박수 5번 치기",
-    p17: "제자리에서 박수 5번 치기",
-    p16: "제자리에서 박수 5번 치기",
-    p15: "제자리에서 박수 5번 치기",
-    p14: "제자리에서 박수 5번 치기",
-    p13: "제자리에서 박수 5번 치기",
-    p12: "제자리에서 박수 5번 치기",
-    p11: "제자리에서 박수 5번 치기",
+    p20: "말씀찾기/찬송가 찾기",
+    p19: "말씀찾기/찬송가 찾기",
+    p18: "(대표 2명) 선정해서 일심동체 게임",
+    p17: "말씀찾기/찬송가 찾기",
+    p16: "깜짝 퀴즈",
+    p15: "말씀찾기/찬송가 찾기",
+    p14: "교회 장로님 이름 3명 5초 안에 말하기",
+    p13: "말씀찾기/찬송가 찾기",
+    p12: "말씀찾기/찬송가 찾기",
+    p11: "깜짝 퀴즈",
 
-    d1: "제자리에서 박수 5번 치기",
-    d2: "제자리에서 박수 5번 치기",
-    d3: "제자리에서 박수 5번 치기",
-    d4: "제자리에서 박수 5번 치기",
+    d1: "말씀찾기/찬송가 찾기",
+    d2: "말씀찾기/찬송가 찾기",
+    d3: "예수님 제자 5명 5초안에 말하기",
+    d4: "말씀찾기/찬송가 찾기",
 
-    d5: "제자리에서 박수 5번 치기",
-    d6: "제자리에서 박수 5번 치기",
-    d7: "제자리에서 박수 5번 치기",
-    d8: "제자리에서 박수 5번 치기",
+    d5: "성경인물 3명을 5초안에 말하기",
+    d6: "말씀찾기/찬송가 찾기",
+    d7: "말씀찾기/찬송가 찾기",
+    d8: "교회 남자집사님 이름 3명 5초안에 말하기",
 
-    center: "제자리에서 박수 5번 치기"
+    center: "깜짝 퀴즈"
 };
 
+const timedMissionPoints = [
+    "p8",
+    "p7",
+    "p5",
+    "p3",
+    "p2",
+    "p20",
+    "p19",
+    "p17",
+    "p15",
+    "p13",
+    "p12",
+    "d1",
+    "d2",
+    "d4",
+    "d6",
+    "d7"
+];
 
+const timedMissionSeconds = 12;
+
+let missionTimer = null;
+let missionTimeLeft = 0;
 /* =========================
    게임 시작
 ========================= */
@@ -282,7 +309,12 @@ function createPiece(team, number) {
     element.className =
         "game-piece player" + team;
 
-    element.textContent = number;
+    const koreanNumbers = [
+    "방", "이", "교", "회", "방",
+    "이", "사", "아", "자", "차"
+];
+
+element.textContent = koreanNumbers[number - 1];
 
     const piece = {
 
@@ -480,16 +512,14 @@ function movePiece(piece) {
         return;
     }
 
-
     const value =
         yutValues[selectedYut];
 
 
     /*
-     * 시작 위치에서는
-     * 절대로 경로 선택을 띄우지 않음
+     * 아직 출발하지 않은 말
+     * 도(1칸) → p10
      */
-
     if (piece.position === null) {
 
         executeMove(
@@ -503,14 +533,33 @@ function movePiece(piece) {
 
 
     /*
-     * 코너에 있는 경우에만
-     * 경로 선택
+     * 빽도
+     * 현재 말이 들어와 있는 경로를
+     * 그대로 역방향으로 이동
      */
+    if (value < 0) {
 
-    if (value > 0 &&
-        isRouteChoiceCorner(piece)) {
+        executeMove(
+            piece,
+            value,
+            piece.route
+        );
 
-        pendingRoutePiece = piece;
+        return;
+    }
+
+
+    /*
+     * 앞으로 이동할 때
+     * 경로 선택이 필요한 모서리
+     */
+    if (
+        value > 0 &&
+        isRouteChoiceCorner(piece)
+    ) {
+
+        pendingRoutePiece =
+            piece;
 
         openRouteChoice(piece);
 
@@ -518,6 +567,9 @@ function movePiece(piece) {
     }
 
 
+    /*
+     * 일반 이동
+     */
     executeMove(
         piece,
         value,
@@ -752,10 +804,17 @@ diagonalRouteButton.addEventListener(
          * 그 외에는 실행하지 않음
          */
 
-        else {
+        else if (piece.position === "p16") {
+    route = diagonalRoute2;
+}
 
-            return;
-        }
+else if (piece.position === "center") {
+    route = diagonalRoute1;
+}
+
+else {
+    return;
+}
 
 
         piece.route =
@@ -792,19 +851,84 @@ function executeMove(
     const movingPieces =
         getStack(piece);
 
-
     const mainPiece =
         movingPieces[0];
 
-
     const previousPosition =
         mainPiece.position;
-
 
     const previousRoute =
         mainPiece.route;
 
 
+    /*
+     * 시작 위치
+     * 첫 이동은 바깥쪽 경로의 p10으로 이동
+     */
+    if (previousPosition === null) {
+
+        if (value < 0) {
+
+            result.textContent =
+                "시작 위치에서는 빽도로 이동할 수 없습니다.";
+
+            return;
+        }
+
+        const targetIndex =
+            value - 1;
+
+        if (
+            targetIndex < 0 ||
+            targetIndex >= outerRoute.length
+        ) {
+
+            result.textContent =
+                "이동할 수 없는 위치입니다.";
+
+            return;
+        }
+
+        moveToPoint(
+            movingPieces,
+            outerRoute[targetIndex],
+            previousPosition,
+            previousRoute
+        );
+
+        return;
+    }
+
+
+    /*
+     * p11에서 빽도
+     * p11 → p10
+     */
+    if (
+        value < 0 &&
+        mainPiece.position === "p11"
+    ) {
+
+        movingPieces.forEach(
+            movingPiece => {
+                movingPiece.route = "outer";
+            }
+        );
+
+        moveToPoint(
+            movingPieces,
+            "p10",
+            previousPosition,
+            previousRoute
+        );
+
+        return;
+    }
+
+
+    /*
+     * 현재 말이 있는 경로
+     */
     const route =
         getRoute(
             mainPiece,
@@ -812,7 +936,7 @@ function executeMove(
         );
 
 
-    let currentIndex =
+    const currentIndex =
         getRouteIndex(
             mainPiece,
             route
@@ -820,42 +944,60 @@ function executeMove(
 
 
     /*
-     * 시작 위치
+     * 현재 위치를 기준으로
+     * 결과만큼 이동
      */
-
-    if (mainPiece.position === null) {
-        currentIndex = -1;
-    }
-
-
     const targetIndex =
         currentIndex + value;
 
 
-    /*
-     * 빽도
-     */
+    /* =========================
+   빽도
+========================= */
 
-    if (value < 0) {
-
-        if (currentIndex <= 0) {
-
-            result.textContent =
-                "빽도로 이동할 수 없습니다.";
-
-            return;
-        }
+if (value < 0) {
+    // p10에서는 특수 규칙으로 p11로 이동
+    if (mainPiece.position === "p10") {
+        moveToPoint(
+            movingPieces,
+            "p11",
+            previousPosition,
+            previousRoute
+        );
+        return;
     }
 
+    // p11에서는 빽도 사용 불가
+    if (mainPiece.position === "p11") {
+        result.textContent = "p11에서는 빽도를 사용할 수 없습니다.";
+        return;
+    }
+
+    // 현재 위치에서 왔던 방향으로 한 칸 뒤로 이동
+    const backIndex = currentIndex - 1;
+
+    if (backIndex < 0) {
+        result.textContent = "더 이상 뒤로 갈 수 없습니다.";
+        return;
+    }
+
+    const backPoint = route[backIndex];
+
+    moveToPoint(
+        movingPieces,
+        backPoint,
+        previousPosition,
+        previousRoute
+    );
+    return;
+}
+
 
     /*
-     * 이동하면서 도착칸을
-     * 지나가는 경우
+     * p11을 지나가면 완주
      */
-
     const finishIndex =
         route.indexOf("p11");
-
 
     if (
         value > 0 &&
@@ -872,9 +1014,8 @@ function executeMove(
 
 
     /*
-     * 도착칸에 정확히 도착
+     * p11에 정확히 도착
      */
-
     if (
         value > 0 &&
         route[targetIndex] === "p11"
@@ -882,7 +1023,7 @@ function executeMove(
 
         moveToPoint(
             movingPieces,
-            route[targetIndex],
+            "p11",
             previousPosition,
             previousRoute
         );
@@ -892,9 +1033,8 @@ function executeMove(
 
 
     /*
-     * 경로 끝을 넘어가는 경우
+     * 경로 밖으로 이동
      */
-
     if (
         targetIndex < 0 ||
         targetIndex >= route.length
@@ -907,6 +1047,9 @@ function executeMove(
     }
 
 
+    /*
+     * 실제 이동할 칸
+     */
     const targetPoint =
         route[targetIndex];
 
@@ -1142,13 +1285,70 @@ function placeStackOnPoint(
 
 function showMission(pointName) {
 
-    missionText.textContent =
-        missions[pointName] ||
-        "미션을 수행해주세요.";
+    if (missionTimer !== null) {
+        clearInterval(missionTimer);
+        missionTimer = null;
+    }
 
+    if (timedMissionPoints.includes(pointName)) {
 
-    missionOverlay.style.display =
-        "flex";
+        missionTimeLeft = timedMissionSeconds;
+
+        missionText.innerHTML =
+            missions[pointName] +
+            "<br><br>" +
+            "남은 시간: " +
+            "<br>" +
+            "<span id=\"mission-timer\">10.00</span>초";
+
+        missionOverlay.style.display =
+            "flex";
+
+        const startTime = performance.now();
+
+        missionTimer = setInterval(
+            function () {
+
+                const elapsed =
+                    (performance.now() - startTime) / 1000;
+
+                const remaining =
+                    Math.max(
+                        0,
+                        timedMissionSeconds - elapsed
+                    );
+
+                const timerElement =
+                    document.getElementById(
+                        "mission-timer"
+                    );
+
+                if (timerElement) {
+                    timerElement.textContent =
+                        remaining.toFixed(2);
+                }
+
+                if (remaining <= 0) {
+
+                    clearInterval(missionTimer);
+                    missionTimer = null;
+
+                    missionFailButton.click();
+                }
+
+            },
+            10
+        );
+
+    } else {
+
+        missionText.textContent =
+            missions[pointName] ||
+            "미션을 수행해주세요.";
+
+        missionOverlay.style.display =
+            "flex";
+    }
 }
 
 
@@ -1345,6 +1545,13 @@ missionFailButton.addEventListener(
 ========================= */
 
 function closeMission() {
+
+    if (missionTimer !== null) {
+        clearInterval(missionTimer);
+        missionTimer = null;
+    }
+
+    missionTimeLeft = 0;
 
     missionOverlay.style.display =
         "none";
